@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>48 Laws of Power</title>
+<style>
+    body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(to bottom, #111, #000);
+        color: #fff;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: 0;
+    }
+
+    .card {
+        width: 290px;
+        height: 375px;
+        background-color: #111;
+        border: 1px solid #333;
+        border-radius: 20px;
+        box-shadow: 0 0 20px 3px red;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        transition: all 0.5s ease;
+    }
+
+    .law-number {
+        color: gold;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .law-title {
+        color: red;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .law-explanation {
+        color: #ddd;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        margin-top: 25px;
+        gap: 20px;
+    }
+
+    button {
+        background-color: #111;
+        color: #fff;
+        border: 1px solid red;
+        border-radius: 8px;
+        padding: 8px 18px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background-color: red;
+        color: #000;
+    }
+</style>
+</head>
+<body>
+    <div class="card" id="lawCard">
+        <div class="law-number" id="lawNumber"></div>
+        <div class="law-title" id="lawTitle"></div>
+        <div class="law-explanation" id="lawExplanation"></div>
+    </div>
+
+    <div class="buttons">
+        <button onclick="prevLaw()">Previous</button>
+        <button onclick="nextLaw()">Next</button>
+    </div>
+
+<script>
+const laws = [
+    { title: "Never Outshine the Master", exp: "Let those above you feel superior — it ensures your rise remains unnoticed." },
+    { title: "Never Put Too Much Trust in Friends", exp: "Friends can betray out of emotion; rely instead on calculated alliances." },
+    { title: "Conceal Your Intentions", exp: "Hide your goals so others can’t predict or sabotage your moves." },
+    { title: "Always Say Less Than Necessary", exp: "Power grows when you speak with precision and mystery." },
+    { title: "Guard Your Reputation", exp: "Your image is your armor — defend it fiercely." },
+    { title: "Court Attention at All Costs", exp: "Visibility creates influence — fade and you’re forgotten." },
+    { title: "Get Others to Do the Work", exp: "Leverage others’ skills but take the credit strategically." },
+    { title: "Make People Come to You", exp: "Draw them in — control is yours when others chase you." },
+    { title: "Win Through Actions, Not Arguments", exp: "Show your power through results, not words." },
+    { title: "Avoid the Unhappy and Unlucky", exp: "Energy is contagious — surround yourself with strength." },
+    { title: "Make People Dependent on You", exp: "Power comes from being needed — never fully replaceable." },
+    { title: "Use Honesty to Disarm", exp: "One genuine act hides a dozen strategic moves." },
+    { title: "Appeal to Self-Interest", exp: "People move for their benefit, not yours — frame it that way." },
+    { title: "Pose as a Friend, Work as a Spy", exp: "Gather information quietly while appearing harmless." },
+    { title: "Crush Your Enemy Totally", exp: "Leave no chance for revenge — finish conflicts completely." },
+    { title: "Use Absence to Gain Respect", exp: "Rarity builds value — don’t always be available." },
+    { title: "Cultivate Unpredictability", exp: "Keep others guessing — fear grows in uncertainty." },
+    { title: "Avoid Isolation", exp: "Stay connected; walls breed blindness and weakness." },
+    { title: "Know Who You’re Dealing With", exp: "Misjudging people leads to fatal errors." },
+    { title: "Do Not Commit to Anyone", exp: "Stay independent — alliances limit freedom." },
+    { title: "Play a Sucker to Catch a Sucker", exp: "Appear weaker to manipulate stronger foes." },
+    { title: "Use Surrender Tactically", exp: "Yield temporarily to win long-term." },
+    { title: "Concentrate Your Forces", exp: "Focus your energy — diffusion weakens impact." },
+    { title: "Play the Perfect Courtier", exp: "Charm, adapt, and serve power gracefully." },
+    { title: "Re-Create Yourself", exp: "Shape your identity — control how the world sees you." },
+    { title: "Keep Your Hands Clean", exp: "Let others do your dirty work — stay untouchable." },
+    { title: "Create Cult-Like Following", exp: "Inspire belief — devotion is a weapon." },
+    { title: "Enter Action with Boldness", exp: "Hesitation kills — confidence commands." },
+    { title: "Plan to the End", exp: "Vision prevents chaos — always think several moves ahead." },
+    { title: "Make Achievements Seem Effortless", exp: "Hide the grind — display only mastery." },
+    { title: "Control the Options", exp: "Win by letting others choose only what benefits you." },
+    { title: "Play to People’s Fantasies", exp: "Give them dreams, not reality — control their desire." },
+    { title: "Find Their Weak Spot", exp: "Everyone has a pressure point — learn it, use it." },
+    { title: "Act Like a King to Be Treated Like One", exp: "Carry yourself with worth — respect follows presence." },
+    { title: "Master the Art of Timing", exp: "Wait for your moment — power blooms in patience." },
+    { title: "Ignore What You Can’t Have", exp: "Disdain diminishes envy’s sting." },
+    { title: "Create Compelling Spectacles", exp: "Dramatic visuals command attention and awe." },
+    { title: "Blend In When Needed", exp: "Behave like others to move unnoticed through systems." },
+    { title: "Stir the Waters to Catch Fish", exp: "Agitate emotions to reveal weakness." },
+    { title: "Despise the Free Lunch", exp: "Nothing is truly free — dependence costs power." },
+    { title: "Avoid a Great Man’s Shoes", exp: "Forge your own path — comparisons crush growth." },
+    { title: "Strike the Shepherd", exp: "Remove the leader and the followers scatter." },
+    { title: "Work on Hearts and Minds", exp: "Influence emotion, and control becomes effortless." },
+    { title: "Mirror Your Enemies", exp: "Reflect their actions — confuse and disarm them." },
+    { title: "Preach Change Carefully", exp: "Too much reform breeds resistance — move subtly." },
+    { title: "Never Appear Too Perfect", exp: "Show flaws to avoid envy’s poison." },
+    { title: "Know When to Stop", exp: "Excess destroys success — master restraint." },
+    { title: "Assume Formlessness", exp: "Stay adaptable — rigidity breaks, fluidity conquers." }
+];
+
+let index = 0;
+
+function showLaw(i) {
+    document.getElementById("lawNumber").innerText = `Law ${i + 1}`;
+    document.getElementById("lawTitle").innerText = laws[i].title;
+    document.getElementById("lawExplanation").innerText = laws[i].exp;
+}
+
+function nextLaw() {
+    index = (index + 1) % laws.length;
+    showLaw(index);
+}
+
+function prevLaw() {
+    index = (index - 1 + laws.length) % laws.length;
+    showLaw(index);
+}
+
+showLaw(index);
+</script>
+</body>
+</html>
